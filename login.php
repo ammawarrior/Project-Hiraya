@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $error = "Your account is pending admin approval. You will be notified via email once it's approved.";
             } elseif ($user['user_status'] == 1) {
                 $_SESSION['user_id'] = $user['user_id'];
-                $_SESSION['username'] = $user['username'];
+                $_SESSION['username'] = $user['username'];  // Add this line
                 $_SESSION['role'] = $user['role'];
 
                 // Redirect based on role
@@ -28,6 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     exit();
                 } elseif ($user['role'] == 2) {
                     header("Location: seller.php");
+                    exit();
+                } elseif ($user['role'] == 3) {
+                    header("Location: index.php");
                     exit();
                 } else {
                     $error = "Unauthorized role.";
