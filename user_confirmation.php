@@ -91,7 +91,7 @@ $result = $conn->query($query);
             <div class="main-content">
                 <section class="section">
                     <div class="section-header d-flex justify-content-between align-items-center">
-                        <h1>New Seller Confirmations</h1>
+                        <h1>New Innovator Confirmations</h1>
                         <div id="current-datetime" style="font-size: 1.1rem; font-weight: 500;"></div>
                     </div>
 
@@ -100,7 +100,7 @@ $result = $conn->query($query);
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Pending Seller Accounts</h4>
+                                        <h4>Pending Innovator Accounts</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -108,7 +108,7 @@ $result = $conn->query($query);
                                                 <thead>
                                                     <tr>
                                                         <th>Picture</th>
-                                                        <th>Seller Name</th>
+                                                        <th>Innovator Name</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -176,7 +176,7 @@ $result = $conn->query($query);
             <div class="modal-content">
                 <form method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="userModalLabel">Seller Confirmation</h5>
+                        <h5 class="modal-title" id="userModalLabel">Innovator Confirmation</h5>
                         <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                     </div>
                     <div class="modal-body text-center">

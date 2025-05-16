@@ -30,7 +30,8 @@ $stmt->close();
 // Role mapping
 $roles = [
     1 => "Admin",
-    2 => "Seller"
+    2 => "Innovator",
+    3 => "Client"
 ];
 
 // Handle form submission for update

@@ -13,7 +13,8 @@ include 'db_ec.php';
 // Define role mapping
 $roles = [
     1 => 'Admin',
-    2 => 'Seller'
+    2 => 'Innovator',
+    3 => 'Client'
 ];
 
 // Fetch users

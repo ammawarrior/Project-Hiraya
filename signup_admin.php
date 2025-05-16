@@ -58,7 +58,7 @@ $conn->close();
     <link rel="icon" type="image/png" href="assets/img/dost.png">
     <style>
         body {
-            background: linear-gradient(-45deg, #0d4e86, #1A2980, #26D0CE);
+            background: linear-gradient(-45deg, #2C6B3F, #388E3C, #66BB6A);
             background-size: 400% 400%;
             animation: gradientAnimation 8s ease infinite;
             display: flex;
@@ -138,7 +138,7 @@ $conn->close();
             background: rgba(255, 255, 255, 0.4);
         }
         .form-group select option {
-    background: #1A2980; /* Dark theme color */
+    background: #A9D2AB; /* Dark theme color */
     color: white;
 }
         
@@ -149,7 +149,7 @@ $conn->close();
         }
 
         .btn-primary {
-            background: linear-gradient(-45deg, #0d4e86, #1A2980, #26D0CE);
+            background: linear-gradient(-45deg, #2C6B3F, #388E3C, #66BB6A);
             color: white;
             border: none;
             padding: 14px;
@@ -182,7 +182,8 @@ $conn->close();
             <div class="form-group">
     <label for="role">Role</label>
     <select name="role" required>
-        <option value="2">Seller</option>
+        <option value="3">Client</option>
+        <option value="2">Innovator</option>
         <option value="1">Admin</option>
     </select>
 </div>

@@ -53,7 +53,7 @@ $role = $_SESSION['role'] ?? null;
                 <ul class="dropdown-menu">
                     <?php if ($role == 1): ?>
                         <li><a class="nav-link" href="admin.php">Product Confirmation</a></li>
-                        <li><a class="nav-link" href="user_confirmation.php">Seller Confirmation</a></li>
+                        <li><a class="nav-link" href="user_confirmation.php">Innovator Confirmation</a></li>
                         <li><a class="nav-link" href="analytics.php">Analytics</a></li>
                         <li><a class="nav-link" href="manage_user.php">Manage Users</a></li>
                     <?php endif; ?>
