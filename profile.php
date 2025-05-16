@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Allow access for Admin (1), Analyst (2), Panelist (3)
+
 if (!in_array($_SESSION['role'], [1, 2, 3])) {
     header("Location: login.php");
     exit();
@@ -37,8 +37,8 @@ $stmt->close();
 // Role mapping
 $roles = [
     1 => 'Admin',
-    2 => 'Analyst',
-    3 => 'Panelist'
+    2 => 'Innovator',
+    3 => 'Client'
 ];
 
 // Handle form submission for update
@@ -70,11 +70,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $stmt->execute();
     $stmt->close();
     
-if ($user['role'] == 1 || $user['role'] == 2) {
+if ($user['role'] == 1) {
     header("Location: admin.php");
-} elseif ($user['role'] == 3) {
+} elseif ($user['role'] == 2) {
     header("Location: seller.php");
+} elseif ($user['role'] == 3) {
+    header("Location: dashboard.php");
 }
+
 
 exit();
 
@@ -94,7 +97,7 @@ $conn->close();
     <link rel="icon" type="image/png" href="assets/img/dost.png">
     <style>
         body {
-            background: linear-gradient(-45deg, #1A2980, #26D0CE);
+            background: linear-gradient(-45deg, #2C6B3F, #388E3C, #66BB6A);
             background-size: 400% 400%;
             animation: gradientAnimation 8s ease infinite;
             display: flex;
@@ -162,7 +165,7 @@ $conn->close();
         }
 
         .form-group select option {
-            background: #1A2980; /* Dark theme color */
+            background: #A9D2AB; /* Dark theme color */
             color: white;
         }
 
@@ -182,7 +185,7 @@ $conn->close();
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #1A2980, #26D0CE);
+            background: linear-gradient(-45deg, #2C6B3F, #388E3C, #66BB6A);
             color: white;
         }
 
@@ -230,12 +233,15 @@ $conn->close();
                 </div>
                 <div class="button-group">
                                 <?php
-                    $back_link = '#';
-                    if ($user['role'] == 1 || $user['role'] == 2) {
-                        $back_link = 'analyst.php';
-                    } elseif ($user['role'] == 3) {
-                        $back_link = 'dashboard_p.php';
-                    }
+                   $back_link = '#';
+if ($user['role'] == 1) {
+    $back_link = 'admin.php';
+} elseif ($user['role'] == 2) {
+    $back_link = 'seller.php';
+} elseif ($user['role'] == 3) {
+    $back_link = 'dashboard.php';
+}
+
                     ?>
                     <a href="<?php echo $back_link; ?>" class="btn-primary">Back</a>
 
@@ -253,15 +259,18 @@ $conn->close();
         const backButton = document.getElementById('backButton');
 
         function updateBackHref() {
-            const role = roleSelect.value;
-            if (role === '1' || role === '2') {
-                backButton.href = 'analyst.php';
-            } else if (role === '3') {
-                backButton.href = 'dashboard_p.php';
-            } else {
-                backButton.href = '#';
-            }
-        }
+    const role = roleSelect.value;
+    if (role === '1') {
+        backButton.href = 'admin.php';
+    } else if (role === '2') {
+        backButton.href = 'seller.php';
+    } else if (role === '3') {
+        backButton.href = 'dashboard.php';
+    } else {
+        backButton.href = '#';
+    }
+}
+
 
         updateBackHref(); // Set initially
         roleSelect.addEventListener('change', updateBackHref); // Update if role changes

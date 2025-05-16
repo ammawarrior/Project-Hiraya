@@ -87,7 +87,7 @@ $conn->close();
     <link rel="icon" type="image/png" href="assets/img/dost.png">
     <style>
         body {
-            background: linear-gradient(-45deg, #1A2980, #26D0CE);
+            background: linear-gradient(-45deg, #2C6B3F, #388E3C, #66BB6A);
             background-size: 400% 400%;
             animation: gradientAnimation 8s ease infinite;
             display: flex;
@@ -155,7 +155,7 @@ $conn->close();
         }
 
         .form-group select option {
-            background: #1A2980; /* Dark theme color */
+            background: #A9D2AB; /* Dark theme color */
             color: white;
         }
 
@@ -175,7 +175,7 @@ $conn->close();
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #1A2980, #26D0CE);
+            background: linear-gradient(-45deg, #2C6B3F, #388E3C, #66BB6A);
             color: white;
         }
 
