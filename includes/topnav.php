@@ -62,11 +62,17 @@ if (!file_exists(__DIR__ . "/../" . $user_picture)) {
         </span>
         
     </a>
-    <div class="dropdown-menu dropdown-menu-right">
-        <a href="logout.php" class="dropdown-item has-icon text-danger">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
+<div class="dropdown-menu dropdown-menu-right">
+    <a href="profile.php?id=<?php echo $_SESSION['user_id']; ?>" class="dropdown-item has-icon">
+        <i class="fas fa-user-cog"></i> Manage Profile
+    </a>
+    <div class="dropdown-divider"></div>
+    <a href="logout.php" class="dropdown-item has-icon text-danger">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+</div>
+
+
 </li>
     </ul>
 </nav>
