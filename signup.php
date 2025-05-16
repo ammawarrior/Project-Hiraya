@@ -312,7 +312,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="role">Account type</label>
                 <select name="role" required>
                     <option value="3">Member</option>
-                    <option value="2">Seller</option>
+                    <option value="2">Innovator</option>
                 </select>
             </div>
 
