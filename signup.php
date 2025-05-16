@@ -315,7 +315,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="role">Account type</label>
                 <select name="role" required>
-                    <option value="3">Member</option>
+                    <option value="3">Investor</option>
                     <option value="2">Innovator</option>
                 </select>
             </div>
