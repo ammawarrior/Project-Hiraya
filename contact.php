@@ -43,11 +43,13 @@ if (!$seller) {
             <div class="uk-text-center uk-margin-large-bottom">
                 <?php 
                 // Set default user picture if none is provided
-                $user_picture = !empty($seller['user_picture']) ? htmlspecialchars($seller['user_picture']) : 'img/profile_null.png';
+                $user_picture = !empty($seller['user_picture']) && file_exists("uploads/" . $seller['user_picture'])
+                    ? "uploads/" . $seller['user_picture']
+                    : 'img/profile_null.png';
                 ?>
                 <img class="uk-border-circle uk-animation-slide-bottom-small uk-margin-bottom" 
                      width="150" height="150" 
-                     src="<?php echo $user_picture; ?>" 
+                     src="<?php echo htmlspecialchars($user_picture); ?>" 
                      alt="<?php echo htmlspecialchars($seller['username']); ?>" 
                      style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;">
                 <h2 class="uk-margin-remove-bottom uk-text-bold uk-animation-slide-right-small" style="margin-top: 20px; "><?php echo htmlspecialchars($seller['username']); ?></h2>

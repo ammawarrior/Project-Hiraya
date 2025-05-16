@@ -2,16 +2,46 @@
 require_once 'config/database.php';
 include 'layout/header.php';
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
+// Only check for login when user tries to like a product
+// The actual login check will be in the JavaScript for the like button
+
+// Fetch products from database
+$category_filter = isset($_GET['category']) ? (int)$_GET['category'] : null;
+$query = "SELECT p.*, u.username, u.user_picture 
+          FROM products p 
+          JOIN users u ON p.user_id = u.user_id 
+          WHERE p.status IN (1, 2)";
+
+if ($category_filter) {
+    $query .= " AND p.category = :category";
 }
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
+$stmt = $pdo->prepare($query);
+if ($category_filter) {
+    $stmt->bindValue(':category', $category_filter, PDO::PARAM_INT);
+}
+$stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Verify product_likes table exists
+try {
+    $stmt = $pdo->query("SHOW TABLES LIKE 'product_likes'");
+    if ($stmt->rowCount() == 0) {
+        throw new Exception("product_likes table does not exist!");
+    }
+    
+    // Verify table structure
+    $stmt = $pdo->query("DESCRIBE product_likes");
+    $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $required_columns = ['user_id', 'product_id'];
+    $missing_columns = array_diff($required_columns, array_column($columns, 'Field'));
+    
+    if (!empty($missing_columns)) {
+        throw new Exception("Missing required columns in product_likes table: " . implode(', ', $missing_columns));
+    }
+} catch (Exception $e) {
+    // Debug output - remove in production
+    // echo "Database error: " . $e->getMessage() . "<br>";
 }
 
 // Fetch products from database
@@ -45,17 +75,37 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $user_liked = false;
 if (isset($_SESSION['user_id'])) {
-    $stmt = $pdo->prepare("SELECT 1 FROM product_likes WHERE user_id = :user_id AND product_id = :product_id");
-    $stmt->execute([':user_id' => $_SESSION['user_id'], ':product_id' => $product['product_id']]);
-    $user_liked = $stmt->fetchColumn() ? true : false;
+    try {
+        // Debug output - remove in production
+        // echo "Checking like status for User ID: " . $_SESSION['user_id'] . ", Product ID: " . $product['product_id'] . "<br>";
+        
+        $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM product_likes WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt->execute([':user_id' => $_SESSION['user_id'], ':product_id' => $product['product_id']]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user_liked = $result['count'] > 0;
+        
+        // Debug output - remove in production
+        // echo "Debug: Like count: " . $result['count'] . ", Liked: " . ($user_liked ? 'Yes' : 'No') . "<br>";
+    } catch (PDOException $e) {
+        // Debug output - remove in production
+        // echo "Database error: " . $e->getMessage() . "<br>";
+        $user_liked = false;
+    }
 }
 
-        // Process product pictures (assuming they are stored as comma-separated paths)
-        $product_images = explode(',', $product['product_pictures']);
-        $first_image = !empty(trim($product_images[0])) && file_exists("uploads/" . trim($product_images[0])) 
-            ? "uploads/" . trim($product_images[0])
-            : 'img/agriculture.jpg'; // Default image for products
+        // Process product pictures (JSON-encoded array)
+$product_images = json_decode($product['product_pictures'], true);
+if (!is_array($product_images)) {
+    $product_images = [];
+}
+    
+// Get first image path
+$first_image = !empty($product_images[0]) && file_exists($product_images[0]) 
+    ? $product_images[0]
+    : 'img/agriculture.jpg'; // Default image for products
 
+// Remove quotes and slashes from JSON path
+$first_image = str_replace(['\\\\', '\"'], ['', ''], $first_image);
         // Set default user picture if none is provided
         $user_picture = !empty($product['user_picture']) && file_exists("uploads/" . $product['user_picture'])
             ? "uploads/" . $product['user_picture']
@@ -68,12 +118,10 @@ if (isset($_SESSION['user_id'])) {
             <div class="uk-position-cover uk-overlay-xlight"></div>
             <div class="uk-position-small uk-position-top-right" style="z-index: 10;">
     <a href="#"
-       class="uk-icon-button uk-like"
+       class="uk-icon-button uk-like <?php echo $user_liked ? 'liked' : ''; ?>"
        data-uk-icon="heart"
-       data-product-id="<?php echo $product['product_id']; ?>"
-       style="<?php echo $user_liked ? 'color: red;' : ''; ?>">
+       data-product-id="<?php echo $product['product_id']; ?>">
     </a>
-    <span><?php echo $product['likes']; ?> likes</span>
 </div>
 
           </div>
@@ -101,41 +149,6 @@ if (isset($_SESSION['user_id'])) {
   </div>
 </div>
 
-<div id="offcanvas" data-uk-offcanvas="flip: true; overlay: true">
-  <div class="uk-offcanvas-bar">
-    <a class="uk-logo" href="index.php">Hiraya</a>
-    <button class="uk-offcanvas-close" type="button" data-uk-close="ratio: 1.2"></button>
-    <ul class="uk-nav uk-nav-primary uk-nav-offcanvas uk-margin-medium-top uk-text-center">
-      <li class="uk-active"><a href="index.php">Courses</a></li>
-      <li ><a href="events.html">Events</a></li>
-      <li ><a href="course.html">Course</a></li>
-      <li ><a href="event.html">Event</a></li>
-      <li ><a href="search.html">Search</a></li>
-      <li ><a href="sign-in.html">Sign In</a></li>
-      <li ><a href="sign-up.html">Sign Up</a></li>
-    </ul>
-    <div class="uk-margin-medium-top">
-      <a class="uk-button uk-width-1-1 uk-button-primary-light" href="sign-up.html">Sign Up</a>
-    </div>
-    <div class="uk-margin-medium-top uk-text-center">
-      <div data-uk-grid class="uk-child-width-auto uk-grid-small uk-flex-center">
-        <div>
-          <a href="https://twitter.com/" data-uk-icon="icon: twitter" class="uk-icon-link" target="_blank"></a>
-        </div>
-        <div>
-          <a href="https://www.facebook.com/" data-uk-icon="icon: facebook" class="uk-icon-link" target="_blank"></a>
-        </div>
-        <div>
-          <a href="https://www.instagram.com/" data-uk-icon="icon: instagram" class="uk-icon-link" target="_blank"></a>
-        </div>
-        <div>
-          <a href="https://vimeo.com/" data-uk-icon="icon: vimeo" class="uk-icon-link" target="_blank"></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const likeButtons = document.querySelectorAll('.uk-like');
@@ -143,31 +156,175 @@ document.addEventListener('DOMContentLoaded', function () {
     likeButtons.forEach(button => {
         button.addEventListener('click', function (e) {
             e.preventDefault();
-            const productId = this.getAttribute('data-product-id');
+            
+            // Check if user is logged in
+            const checkLogin = function() {
+                return fetch('check_login.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.logged_in) {
+                            window.location.href = 'login.php';
+                            return false;
+                        }
+                        return true;
+                    })
+                    .catch(error => {
+                        console.error('Login check error:', error);
+                        window.location.href = 'login.php';
+                        return false;
+                    });
+            };
 
-            fetch('like.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'product_id=' + productId
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const likesCount = this.nextElementSibling;
-                    likesCount.textContent = `${data.likes} likes`;
-                    this.classList.toggle('liked');
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            checkLogin().then(isLoggedIn => {
+                if (!isLoggedIn) return;
+
+                const productId = this.getAttribute('data-product-id');
+
+                fetch('like.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'product_id=' + productId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update only the rating count display
+                        const ratingCount = this.closest('.uk-card').querySelector('.uk-rating .uk-text-bold');
+                        
+                        if (ratingCount) {
+                            // Split the existing text to preserve "likes"
+                            const existingText = ratingCount.textContent;
+                            const likesWord = existingText.includes('likes') ? ' likes' : '';
+                            ratingCount.textContent = `${data.likes}${likesWord}`;
+                        }
+                        
+                        // Toggle the liked class and update colors
+                        this.classList.toggle('liked');
+                        this.style.color = this.classList.contains('liked') ? 'red' : '';
+                        
+                        // Update SVG fill color
+                        const svg = this.querySelector('svg');
+                        if (svg) {
+                            svg.style.fill = this.classList.contains('liked') ? 'red' : '';
+                        }
+                    } else if (data.error === 'login_required') {
+                        window.location.href = 'login.php';
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Like error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            });
         });
     });
 });
 </script>
 
+<style>
+    /* Product Card Animations */
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Image Hover Effects */
+    .product-image {
+        transition: transform 0.3s ease;
+    }
+    .product-image:hover {
+        transform: scale(1.05);
+    }
+
+    /* Seller Info Hover */
+    .seller-info {
+        transition: all 0.3s ease;
+    }
+    .seller-info:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+
+    /* Description Toggle */
+    .description-container {
+        max-height: 200px;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+    .description-container.expanded {
+        max-height: none;
+    }
+
+    /* Button Animations */
+    .expand-button {
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    .expand-button:hover {
+        color: var(--primary-color);
+    }
+
+    /* Related Products Grid */
+    .related-products-grid {
+        transition: all 0.3s ease;
+    }
+    .related-products-grid:hover {
+        transform: scale(1.02);
+    }
+
+    /* Overlay Effects */
+    .uk-overlay-xlight {
+        background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.2));
+    }
+
+    /* Pure CSS Scroll Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .seller-info {
+        animation: fadeIn 0.5s ease-out forwards;
+        opacity: 0;
+    }
+
+    .product-card {
+        animation: fadeIn 0.5s ease-out forwards;
+        opacity: 0;
+    }
+
+    .uk-button-primary {
+        animation: fadeIn 0.5s ease-out forwards 0.3s;
+        opacity: 0;
+    }
+
+    /* Like Button Styles */
+    .uk-icon-button.liked {
+        color: red !important;
+        fill: red !important;
+    }
+    
+    .uk-icon-button.liked svg {
+        fill: red !important;
+        color: red !important;
+    }
+    
+    .uk-icon-button.liked svg path {
+        fill: red !important;
+        stroke: red !important;
+    }
+    
+    .uk-icon-button.liked svg circle {
+        fill: red !important;
+        stroke: red !important;
+    }
+</style>
 
 <?php include 'layout/footer.php'; ?>
 

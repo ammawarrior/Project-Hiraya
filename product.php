@@ -114,11 +114,19 @@ $stmt = $pdo->prepare("SELECT p.*, u.username
 $stmt->execute([$product['category'], $product_id]);
 $related_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Process product pictures (assuming they are stored as comma-separated paths)
-$product_images = explode(',', $product['product_pictures']);
-$first_image = !empty(trim($product_images[0])) && file_exists("uploads/" . trim($product_images[0])) 
-    ? "uploads/" . trim($product_images[0])
+// Process product pictures (JSON-encoded array)
+$product_images = json_decode($product['product_pictures'], true);
+if (!is_array($product_images)) {
+    $product_images = [];
+}
+
+// Get first image path
+$first_image = !empty($product_images[0]) && file_exists($product_images[0]) 
+    ? $product_images[0]
     : 'img/agriculture.jpg'; // Default image if none exists
+
+// Remove quotes and slashes from JSON path
+$first_image = str_replace(['\\', '"'], ['', ''], $first_image);
 
 ?>
 
@@ -219,7 +227,10 @@ $first_image = !empty(trim($product_images[0])) && file_exists("uploads/" . trim
             <h2>Related Products</h2>
             <div class="uk-child-width-1-3@m uk-grid-match uk-grid-medium related-products-grid" data-uk-grid data-uk-scrollspy="cls: uk-animation-slide-left; target: > div > div; delay: 200">
                 <?php foreach ($related_products as $related): 
-                    $related_images = explode(',', $related['product_pictures']);
+                    $related_images = json_decode($related['product_pictures'], true);
+if (!is_array($related_images)) {
+    $related_images = [];
+}
                 ?>
                 <div>
                     <div class="uk-card uk-card-small uk-card-default uk-card-hover uk-border-rounded-large uk-overflow-hidden product-card" data-product-id="<?php echo $related['product_id']; ?>">

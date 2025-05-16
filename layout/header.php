@@ -33,6 +33,9 @@
 	            <li class="uk-active"><a href="index.php">Home</a></li>
 	            <li ><a href="about.php">About</a></li>
 				<li ><a href="courses.php">Courses</a></li>
+	            <?php if(isset($_SESSION['user_id'])): ?>
+	            <li ><a href="wishlist.php">Wishlist</a></li>
+	            <?php endif; ?>
 	          </ul>
 	          <div>
 	            <a class="uk-navbar-toggle" data-uk-search-icon href="#"></a>
