@@ -71,9 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $stmt->close();
     
 if ($user['role'] == 1 || $user['role'] == 2) {
-    header("Location: analyst.php");
+    header("Location: admin.php");
 } elseif ($user['role'] == 3) {
-    header("Location: dashboard_p.php");
+    header("Location: seller.php");
 }
 
 exit();
