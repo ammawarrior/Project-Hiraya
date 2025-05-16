@@ -142,7 +142,7 @@ $result = $conn->query($query);
                                             <table class="table table-striped v_center" id="table-1">
                                             <thead>
                                                 <tr>
-                                                    <th>Product Name</th>
+                                                    <th>Product Names</th>
                                                     <th>Account Name</th>
                                                     <th>Category</th>
                                                     <th>Status</th>
