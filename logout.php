@@ -1,16 +1,11 @@
 <?php
 session_start();
-include 'db_ec.php'; // Database connection
 
+// Unset all session variables
+session_unset();
 
-
-// Check if user is logged in
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-
-
-
-}
+// Destroy the session
+session_destroy();
 
 // Redirect to login page
 header("Location: login.php");
