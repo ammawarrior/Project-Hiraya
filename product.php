@@ -183,7 +183,7 @@ $first_image = str_replace(['\\', '"'], ['', ''], $first_image);
         </div>
         <div class="uk-width-expand">
             <h3 class="uk-card-title uk-margin-remove-bottom"><?php echo htmlspecialchars($product['username']); ?></h3>
-            <p class="uk-text-meta uk-margin-remove-top">Seller</p>
+            <p class="uk-text-meta uk-margin-remove-top">Innovator</p>
         </div>
     </div>
 </div>
@@ -214,7 +214,7 @@ $first_image = str_replace(['\\', '"'], ['', ''], $first_image);
                     <!-- Action Buttons -->
                     <div class="uk-margin">
                         <a href="contact.php?id=<?php echo htmlspecialchars($product['product_id']); ?>" class="uk-button uk-button-secondary uk-width-1-1 uk-box-shadow-medium uk-animation-scale-up" data-uk-scrollspy="cls: uk-animation-scale-up; delay: 300">
-                            Contact Seller
+                            Contact Me!
                         </a>
                     </div>
                 </div>

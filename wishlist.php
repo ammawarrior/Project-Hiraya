@@ -28,18 +28,31 @@ try {
 
 <div class="uk-section uk-margin-top">
     <div class="uk-container">
-        <div class="uk-grid-small uk-flex uk-flex-middle" data-uk-grid>
-            <div class="uk-width-expand@m">
-                <h2>My Wishlist</h2>
+        <!-- Hero Section -->
+        <div class="uk-position-relative uk-margin-large-bottom">
+            <div class="uk-background-primary-dark uk-light uk-border-rounded-large uk-padding-large uk-box-shadow-small">
+                <div class="uk-grid-medium" data-uk-grid>
+                    <div class="uk-width-1-2@m">
+                        <h1 class="uk-heading-medium uk-margin-remove">My Wishlist</h1>
+                        <p class="uk-text-lead uk-margin-medium-top">Save and track your favorite innovations</p>
+                    </div>
+                    <div class="uk-width-1-2@m uk-flex uk-flex-middle uk-flex-right@m">
+                        <span data-uk-icon="icon: heart; ratio: 4" class="uk-text-primary"></span>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <?php if (empty($liked_products)): ?>
-            <div class="uk-alert-warning uk-margin-top" data-uk-alert>
-                <p>Your wishlist is empty. Start liking products to add them here!</p>
-            </div>
-        <?php else: ?>
-            <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-grid-match uk-margin-medium-top" data-uk-grid>
+
+        <!-- Wishlist Items -->
+        <div class="uk-grid-medium uk-child-width-1-2@s uk-child-width-1-3@m" data-uk-grid>
+            <?php if (empty($liked_products)): ?>
+                <div class="uk-text-center uk-margin-large-top" style="display: none;">
+                    <span data-uk-icon="icon: heart; ratio: 4" class="uk-text-muted"></span>
+                    <h3 class="uk-margin-small-top">Your wishlist is empty</h3>
+                    <p class="uk-text-muted">Start adding innovations to your wishlist to track them later</p>
+                    <a href="products.php" class="uk-button uk-button-primary uk-margin-small-top">Browse Innovations</a>
+                </div>
+            <?php else: ?>
                 <?php foreach ($liked_products as $product): 
                     // Process product pictures (JSON-encoded array)
                     $product_images = json_decode($product['product_pictures'], true);
@@ -56,7 +69,7 @@ try {
                     $first_image = str_replace(['\\', '"'], ['', ''], $first_image);
                 ?>
                 <div>
-                    <div class="uk-card uk-card-small uk-card-default uk-card-hover uk-border-rounded-large uk-overflow-hidden">
+                    <div class="uk-card uk-card-default uk-card-hover uk-border-rounded-large uk-overflow-hidden">
                         <div class="uk-card-media-top uk-inline uk-light">
                             <img src="<?php echo htmlspecialchars($first_image); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
                             <div class="uk-position-cover uk-overlay-xlight"></div>
@@ -88,12 +101,21 @@ try {
                                 ?>
                             </div>
                         </div>
-                        <a href="product.php?id=<?php echo $product['product_id']; ?>" class="uk-position-cover"></a>
+                        <div class="uk-card-footer">
+                            <div class="uk-grid-small" data-uk-grid>
+                                <div class="uk-width-1-2">
+                                    <a href="product.php?id=<?php echo $product['product_id']; ?>" class="uk-button uk-button-primary uk-width-1-1">View Details</a>
+                                </div>
+                                <div class="uk-width-1-2">
+                                    <button class="uk-button uk-button-secondary uk-width-1-1">Remove</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 

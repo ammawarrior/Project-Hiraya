@@ -65,12 +65,48 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="uk-section uk-margin-top">
   <div class="uk-container">
-    <div class="uk-grid-small uk-flex uk-flex-middle" data-uk-grid>
-      <div class="uk-width-expand@m">
-        <h2>Products</h2>
+    <!-- Hero Section -->
+    <div class="uk-position-relative uk-margin-large-bottom">
+      <div class="uk-background-primary-dark uk-light uk-border-rounded-large uk-padding-large uk-box-shadow-small">
+        <div class="uk-grid-medium" data-uk-grid>
+          <div class="uk-width-1-2@m">
+            <h1 class="uk-heading-medium uk-margin-remove">Innovation Marketplace</h1>
+            <p class="uk-text-lead uk-margin-medium-top">Discover groundbreaking technologies and innovative solutions</p>
+          </div>
+          <div class="uk-width-1-2@m uk-flex uk-flex-middle uk-flex-right@m">
+            <span data-uk-icon="icon: future; ratio: 4" class="uk-text-primary"></span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="uk-child-width-1-2@s uk-child-width-1-3@m uk-grid-match uk-margin-medium-top" data-uk-grid>
+
+    <!-- Search and Filter Section -->
+    <div class="uk-card uk-card-default uk-card-hover uk-border-rounded-large uk-margin-bottom">
+      <div class="uk-card-body">
+        <div class="uk-grid-medium" data-uk-grid>
+          <div class="uk-width-3-4@m">
+            <div class="uk-inline uk-width-1-1">
+              <span class="uk-form-icon"><span data-uk-icon="icon: search"></span></span>
+              <input class="uk-input" type="text" placeholder="Search innovations...">
+            </div>
+          </div>
+          <div class="uk-width-1-4@m">
+            <select class="uk-select">
+              <option>All Categories</option>
+              <option>Agriculture</option>
+              <option>Healthcare</option>
+              <option>Energy</option>
+              <option>Construction</option>
+              <option>Product Design</option>
+              <option>Information Technology</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="uk-grid-medium uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l" data-uk-grid>
       <?php foreach ($products as $product): 
 
 $user_liked = false;
@@ -112,7 +148,7 @@ $first_image = str_replace(['\\\\', '\"'], ['', ''], $first_image);
             : 'img/profile_null.png';
       ?>
       <div>
-        <div class="uk-card uk-card-small uk-card-default uk-card-hover uk-border-rounded-large uk-overflow-hidden">
+        <div class="uk-card uk-card-default uk-card-hover uk-border-rounded-large uk-overflow-hidden">
           <div class="uk-card-media-top uk-inline uk-light">
             <img src="<?php echo htmlspecialchars($first_image); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
             <div class="uk-position-cover uk-overlay-xlight"></div>
@@ -146,6 +182,17 @@ $first_image = str_replace(['\\\\', '\"'], ['', ''], $first_image);
       </div>
       <?php endforeach; ?>
     </div>    
+
+    <!-- Pagination -->
+    <div class="uk-margin-large-top uk-text-center">
+      <ul class="uk-pagination uk-flex-center" data-uk-margin>
+        <li><a href="#"><span data-uk-pagination-previous></span></a></li>
+        <li><a href="#">1</a></li>
+        <li class="uk-active"><span>2</span></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#"><span data-uk-pagination-next></span></a></li>
+      </ul>
+    </div>
   </div>
 </div>
 

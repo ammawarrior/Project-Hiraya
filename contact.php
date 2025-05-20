@@ -26,20 +26,21 @@ if (!$seller) {
     include 'layout/footer.php';
     exit();
 }
-
 ?>
 
-<div class="uk-section uk-section-large" style="padding: 40px">
+<div class="uk-section uk-margin-top">
     <div class="uk-container uk-container-xsmall">
-        <div class="uk-card uk-card-default uk-card-body uk-border-rounded-large uk-box-shadow-large uk-animation-fade">
+        <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-border-rounded-large uk-box-shadow-medium uk-animation-fade">
+            <!-- Header Section -->
             <div class="uk-text-center uk-margin-large-bottom">
-                <h1 class="uk-heading-primary uk-text-bold uk-text-center">Connect with Our Innovators</h1>
-                <p class="uk-text-large uk-text-lead uk-text-center uk-margin-large-bottom">
+                <h1 class="uk-heading-medium uk-text-bold">Connect with Our Innovator</h1>
+                <p class="uk-text-lead uk-text-muted uk-margin-medium-top">
                     Be part of our community of innovators and technology providers. 
                     Connect with individuals and organizations driving positive change through innovative solutions.
                 </p>
             </div>
             
+            <!-- Profile Section -->
             <div class="uk-text-center uk-margin-large-bottom">
                 <?php 
                 // Set default user picture if none is provided
@@ -52,21 +53,43 @@ if (!$seller) {
                      src="<?php echo htmlspecialchars($user_picture); ?>" 
                      alt="<?php echo htmlspecialchars($seller['username']); ?>" 
                      style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;">
-                <h2 class="uk-margin-remove-bottom uk-text-bold uk-animation-slide-right-small" style="margin-top: 20px; "><?php echo htmlspecialchars($seller['username']); ?></h2>
+                <h2 class="uk-margin-remove-bottom uk-text-bold uk-animation-slide-right-small">
+                    <?php echo htmlspecialchars($seller['username']); ?>
+                </h2>
                 <p class="uk-text-meta uk-margin-remove-top uk-animation-slide-right-small">Innovator</p>
             </div>
 
+            <!-- Contact Details Section -->
             <div class="uk-margin-large">
                 <h3 class="uk-text-bold uk-margin-remove-bottom uk-animation-slide-left-small">Contact Details</h3>
                 <div class="uk-text-break uk-margin-top uk-animation-slide-left-small">
-                    <p><strong>Email:</strong> <?php echo htmlspecialchars($seller['email']); ?></p>
-                    <p><strong>Contact Number:</strong> <?php echo htmlspecialchars($seller['contact_number']); ?></p>
+                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-border-rounded-large uk-margin-small-top">
+                        <div class="uk-grid-small" data-uk-grid>
+                            <div class="uk-width-auto">
+                                <span data-uk-icon="icon: mail; ratio: 1.2" class="uk-text-primary"></span>
+                            </div>
+                            <div class="uk-width-expand">
+                                <p class="uk-margin-remove"><strong>Email:</strong> <?php echo htmlspecialchars($seller['email']); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-card uk-card-default uk-card-hover uk-card-body uk-border-rounded-large uk-margin-small-top">
+                        <div class="uk-grid-small" data-uk-grid>
+                            <div class="uk-width-auto">
+                                <span data-uk-icon="icon: receiver; ratio: 1.2" class="uk-text-primary"></span>
+                            </div>
+                            <div class="uk-width-expand">
+                                <p class="uk-margin-remove"><strong>Contact Number:</strong> <?php echo htmlspecialchars($seller['contact_number']); ?></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Back Button -->
             <div class="uk-margin-large">
                 <a href="javascript:window.history.back();" 
-                   class="uk-button uk-button-secondary uk-width-1-1 uk-box-shadow-medium uk-animation-scale-up">
+                   class="uk-button uk-button-primary uk-width-1-1 uk-box-shadow-medium uk-animation-scale-up">
                     Back to Product
                 </a>
             </div>
